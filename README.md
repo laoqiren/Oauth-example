@@ -9,6 +9,7 @@ Oauth example
 * 主动删除授权App
 * App信息修改
 * 高度可定制化
+* JWTs token机制，减少DB操作
 
 ## 运行
 
