@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CNode社区</title>
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+    <h1 id=user>你还没有登录哦</h1>
+    <a href="/login" id="login">点击通过github登录</a>
+    <div id="articles">
+        <button id="getArticles" hidden>获取文章</button> 
+        <span id=articlesNot hidden>未授权</span>
+        <div id="content" hidden></div>
+    </div>
+    
+    <script>
+        function getCookie(name) 
+        { 
+            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        
+            if(arr=document.cookie.match(reg))
+        
+                return unescape(arr[2]); 
+            else 
+                return null; 
+        } 
+        $(document).ready(function(){
+            let access_token = getCookie('access_token');
+            console.log(access_token)
+            if(!access_token) return;
+            let data = JSON.stringify({
+                access_token:access_token
+            })
+            $.ajax({
+                url: 'http://localhost:3000/api/userInfo',
+                type: 'post',
+                data:data,
+                contentType: 'application/json'
+            }).then(res=>{
+                console.log(res)
+                $('#user').html(`姓名:${res.name},年龄:${res.year},学校:${res.school}`);
+                $('#login').hide();
+                $('#getArticles').show();
+            },res=>{
+                if(res.status === 401) {
+                    $('#user').text('未授权');
+                }
+            })
+
+            $('#getArticles').on('click',function(){
+                $.ajax({
+                    url: 'http://localhost:3000/api/articles',
+                    type: 'post',
+                    data:data,
+                    contentType: 'application/json'
+                }).then(res=>{
+                    console.log(res);
+                    let $html = '';
+                    for(let article of res){
+                        $html += `<li>作者:${article.author},标题:${article.title}</li>`
+                    }
+                    $('#content').html(`<ul>${$html}</ul>`).show();
+                },res=>{
+                    if(res.status === 401) {
+                        $('#articlesNot').show();
+                    }
+                })
+            })
+        })
+    </script>
+</body>
+</html>

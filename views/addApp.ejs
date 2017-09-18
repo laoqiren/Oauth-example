@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册第三方应用</title>
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<style>
+    #container {
+        width: 40%;
+        margin-left: 30%;
+    }
+</style>
+</head>
+<body>
+    <div id="container">
+        <h1>注册/修改第三方应用</h1>
+        <form name="appInfo" method="post">
+            <input type=text value="<%= infos.clientId %>" name="clientId" hidden/>
+            <div class="form-group">
+                <label>Application name:</label>
+                <input class="form-control" type="text" value="<%= infos.name %>" name="appName"/>
+            </div>
+            <div class="form-group">
+                <label>Homepage URL:</label>
+                <input class="form-control" type="text" name="homepage"/>
+            </div>
+            <div class="form-group">
+                <label>Application description</label>
+                <textarea class="form-control" value="<%= infos.description %>" name="description"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Authorization callback URL</label>
+                <input class="form-control" type="text" value="<%= infos.redirectUri %>" name="redirectUri"/>
+            </div>
+            <div class="checkbox">
+                授权：
+                <label class="checkbox-inline">
+                    <input type="checkbox"  checked name="scope" value="userInfo"> 获取用户信息
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="scope" value="articles"> 获取用户文章
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" value="<%= infos.scope %>" name="scope" value="secret"> 获取用户秘密
+                </label>
+            </div>
+            <button type="submit" class="btn btn-success">注册/修改</button>
+        </form>
+    </div>
+</body>
+</html>

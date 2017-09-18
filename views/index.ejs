@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Github主页</title>
+      <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<style>
+    #container {
+        width: 40%;
+        margin-left: 30%;
+    }
+</style>
+</head>
+<body>
+    <div id="container">
+        <h1>授权第三方应用信息</h1>
+         <% if (info) { %>
+            app name: <%= info.name %> <br/>
+            app secret: <%= info.clientSecret %> <br/>
+            app clientId: <%= info.clientId %> <br/>
+            app scope: <%= info.scope %> <br/>
+            <a type="button" class="btn btn-info" href="/api/registerApp">修改应用信息</a>
+            <a type="button" class="btn btn-danger" href="/api/revokeToken?clientId=<%= info.clientId %>">收回Token</a>
+            <a type="button" class="btn btn-danger" href="/api/deleteApp?clientId=<%= info.clientId %>">删除应用</a>
+         <% } %>
+        
+        <% if (!info) { %>
+            <a href="/api/registerApp">注册一个应用</a>
+        <% } %>
+    </div>
+</body>
+</html>
