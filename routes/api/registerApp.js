@@ -18,13 +18,20 @@ exports.register = function(req,res,next){
         homepage,
         scope
     }   
-    let MY_NAMESPACE = uuidv4();
-    info.clientId = uuidv5(Date.now().toString(), MY_NAMESPACE);
-    info.clientSecret = crypto.createHash('md5').update(info.clientId).digest('hex');
-        
-    appInfo.addAppInfo(info,err=>{
-        console.log('注册第三方应用成功！');
-        res.redirect('/')
+    appInfo.getClientIdByUser(req.loginUserId,(err,clientId)=>{
+        console.log('clientId',clientId);
+        if(clientId) {
+            appInfo.deleteAppInfo(clientId,err=>{
+                if(err) console.error(err);
+            })
+        }
+        let MY_NAMESPACE = uuidv4();
+        info.clientId = uuidv5(Date.now().toString(), MY_NAMESPACE);
+        info.clientSecret = crypto.createHash('md5').update(info.clientId).digest('hex');
+            
+        appInfo.addAppInfo(info,err=>{
+            console.log('注册第三方应用成功！');
+            res.redirect('/')
+        })
     })
-    
 }

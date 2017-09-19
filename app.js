@@ -26,21 +26,19 @@ app.all("*",(req,res,next)=>{
 
 app.get('/',(req,res,next)=>{
     appInfo.getAppByUserId('laoqiren',(err,result)=>{
-        let infos = result || {
-            name: '',
-            description: '',
-            redirectUri: '',
-            clientId: '',
-            clientSecret: '',
-            scope: '',
-            homepage: ''
+        if(result) {
+            let infos = result;
+            infos.scope = infos.scope.split(',');
+            return res.render('index',{
+                infos,
+                userId: 'laoqiren'
+            });
         }
-        infos.scope = infos.scope.split(',');
-        console.log(infos.scope);
         res.render('index',{
-            infos,
+            infos: undefined,
             userId: 'laoqiren'
-        });
+        })
+        
     })
 })
 

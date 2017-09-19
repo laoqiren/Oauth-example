@@ -8,7 +8,11 @@ exports.getAppInfo = function (id, callback) {
   };
 
 exports.deleteAppInfo = function(clientId,callback){
-  redisClient.hdel(clientId,err=>{
+  redisClient.del(clientId,err=>{
+    if(err) {
+      return callback(err)
+    }
+    console.log(clientId)
     callback(null)
   })
 }
@@ -23,7 +27,7 @@ exports.addAppInfo = function(info,callback){
 }
 
 exports.getAppByUserId = function(userId,callback){
-  redisClient.get('laoqiren',(err,clientId)=>{
+  redisClient.get(userId,(err,clientId)=>{
     if(err) return callback(err);
     redisClient.hgetall(clientId,(err,info)=>{
       if(err) return rcallback(err);
@@ -32,8 +36,17 @@ exports.getAppByUserId = function(userId,callback){
   })
 }
 
+exports.getClientIdByUser = function(userId,cb){
+  redisClient.get(userId,(err,clientId)=>{
+    cb(null,clientId);
+  })
+}
+
 exports.delAppByUserId = function(userId,callback){
-  redisClient.hdel(userId,err=>{
+  redisClient.del(userId,err=>{
+    if(err) {
+      return callback(err);
+    }
     callback(null)
   })
 }
