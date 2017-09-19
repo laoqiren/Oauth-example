@@ -15,7 +15,7 @@ Server端线上地址: [http://oauth.luoxia.me](http://oauth.luoxia.me:8080/),�
 
 ## 运行流程
 
-**准备**: 安装Server端和Client端依赖，修改Server配置文件(redis相关)，启动Server:
+**准备**: 安装Server端和Client端依赖，修改Server配置文件(redis相关)，启动reids服务，启动Server:
 ```
 npm install
 cd client && npm install
