@@ -26,16 +26,19 @@ app.all("*",(req,res,next)=>{
 
 app.get('/',(req,res,next)=>{
     appInfo.getAppByUserId('laoqiren',(err,result)=>{
-        let info = result || {
+        let infos = result || {
             name: '',
             description: '',
             redirectUri: '',
             clientId: '',
             clientSecret: '',
-            scope: ''
+            scope: '',
+            homepage: ''
         }
+        infos.scope = infos.scope.split(',');
+        console.log(infos.scope);
         res.render('index',{
-            info,
+            infos,
             userId: 'laoqiren'
         });
     })

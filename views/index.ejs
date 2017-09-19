@@ -20,18 +20,52 @@
 </head>
 <body>
     <div id="container">
-        <h1>授权第三方应用信息</h1>
-         <% if (info) { %>
-            app name: <%= info.name %> <br/>
-            app secret: <%= info.clientSecret %> <br/>
-            app clientId: <%= info.clientId %> <br/>
-            app scope: <%= info.scope %> <br/>
-            <a type="button" class="btn btn-info" href="/api/registerApp">修改应用信息</a>
-            <a type="button" class="btn btn-danger" href="/api/revokeToken?clientId=<%= info.clientId %>">收回Token</a>
-            <a type="button" class="btn btn-danger" href="/api/deleteApp?clientId=<%= info.clientId %>">删除应用</a>
+        <h1>已授权第三方应用信息</h1><br/>
+
+         <% if (infos) { %>
+            <div>
+                <strong>clientId:</strong> <%= infos.clientId %> <br/>
+                <strong>clientSecret:</strong> <%= infos.clientSecret %>
+                <br/>
+                <br/>
+                <a type="button" class="btn btn-warning" href="/api/revokeToken?clientId=<%= infos.clientId %>">收回Token</a>
+                <a type="button" class="btn btn-danger" href="/api/deleteApp?clientId=<%= infos.clientId %>">删除应用</a>
+                <a type="button" class="btn btn-primary" href="/api/registerApp">注册一个新的App</a>
+            </div>
+            <br/>
+            <form name="appInfo" method="post" action="/api/modifyApp">
+                <div class="form-group">
+                    <label>Application name:</label>
+                    <input class="form-control" type="text" value="<%= infos.name %>" name="appName"/>
+                </div>
+                <div class="form-group">
+                    <label>Homepage URL:</label>
+                    <input class="form-control" value="<%= infos.homepage %>" type="text" name="homepage"/>
+                </div>
+                <div class="form-group">
+                    <label>Application description</label>
+                    <textarea class="form-control" name="description"><%= infos.description %></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Authorization callback URL</label>
+                    <input class="form-control" type="text" value="<%= infos.redirectUri %>" name="redirectUri"/>
+                </div>
+                <div class="checkbox">
+                    授权：
+                    <label class="checkbox-inline">
+                        <input type="checkbox" <% if (infos.scope.indexOf('userInfo') !== -1) { %> checked <% } %> name="scope" value="userInfo"> 获取用户信息
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" <% if (infos.scope.indexOf('articles') !== -1) { %> checked <% } %> name="scope" value="articles"> 获取用户文章
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" <% if (infos.scope.indexOf('secret') !== -1) { %> checked <% } %> name="scope" value="secret"> 获取用户秘密
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-success">提交修改</button>
+            </form>
          <% } %>
-        
-        <% if (!info) { %>
+        <% if (!infos) { %>
             <a href="/api/registerApp">注册一个应用</a>
         <% } %>
     </div>
