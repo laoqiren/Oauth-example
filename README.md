@@ -1,6 +1,10 @@
 # Oauth-example
 Oauth example,仿Github Oauth,包括完整的授权流程，注册APP,修改APP信息，自定义并动态改变授权范围，测试客户端等。
 
+Server端线上地址: [http://120.77.38.217:3668/](http://120.77.38.217:3668/),可以注册自己的APP.
+
+Client端线上地址: [http://120.77.38.217:4000/](http://120.77.38.217:4000/)，仅作为演示。
+
 ## 功能
 
 * 完整的Oauth Server
