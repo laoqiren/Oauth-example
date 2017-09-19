@@ -14,7 +14,6 @@ Oauth example,仿Github Oauth,包括完整的授权流程，注册APP,修改APP�
 ## 运行流程
 
 **准备**: 安装Server端和Client端依赖，修改Server配置文件(redis相关)，启动Server:
-
 ```
 npm install
 cd client && npm install
