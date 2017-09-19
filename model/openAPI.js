@@ -34,7 +34,7 @@ exports.querySecrets = function(userId,callback){
   let mockSecrets = [];
     // 生成秘密
   for (var i = 0; i < SECRET_NUM; i++) {
-    secrets.push({
+    mockSecrets.push({
       content: faker.lorem.paragraphs(3)
     });
   }

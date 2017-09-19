@@ -1,5 +1,13 @@
 const redis = require('redis');
+const config = require('../config').db;
 
-let redisClient = redis.createClient(6379,'127.0.0.1',{no_ready_check: true});
+let redisClient = redis.createClient(config.port,config.host,{
+    no_ready_check: true,
+    password: config.password
+});
+
+redisClient.on('connect',()=>{
+    console.log('the server has connected to the redis server successfully!')
+})
 
 module.exports = redisClient;
