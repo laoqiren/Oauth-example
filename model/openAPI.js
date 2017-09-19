@@ -1,5 +1,6 @@
 const faker = require('faker');
 var dataArticles = [];
+var secrets = [];
 
 var ARTICLE_NUM = 100;
 
@@ -14,6 +15,14 @@ for (var i = 0; i < 20; i++) {
   });
 }
 
+// 生成秘密
+for (var i = 0; i < 6; i++) {
+  secrets.push({
+    content: faker.lorem.paragraphs(3)
+  });
+}
+
+// 用户信息
 let mockUsers = {
   laoqiren: {
       name: 'laoqiren',
@@ -26,10 +35,18 @@ let mockDatas = {
   laoqiren: dataArticles
 }
 
+let mockSecrets = {
+  laoqiren: secrets
+}
+
 exports.queryArticles = function(userId,callback){
   callback(null,mockDatas[userId]);
 }
 
 exports.queryUserInfo = function(userId,callback){
   callback(null,mockUsers[userId]);
+}
+
+exports.querySecrets = function(userId,callback){
+  callback(null,mockSecrets[userId]);
 }

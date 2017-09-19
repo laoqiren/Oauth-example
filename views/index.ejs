@@ -53,10 +53,10 @@
                 <div class="checkbox">
                     授权：
                     <label class="checkbox-inline">
-                        <input type="checkbox" <% if (infos.scope.indexOf('userInfo') !== -1) { %> checked <% } %> name="scope" value="userInfo" disabled> 获取用户信息
+                        <input type="checkbox" checked name="scope" value="userInfo" disabled> 获取用户信息
                     </label>
                     <label class="checkbox-inline">
-                        <input type="checkbox" <% if (infos.scope.indexOf('articles') !== -1) { %> checked <% } %> name="scope" value="articles"> 获取用户文章
+                        <input type="checkbox" <% if (infos.scope.indexOf('articles') !== -1) { %> checked <% } %> name="scope" value="articles"> 获取用户收藏的文章
                     </label>
                     <label class="checkbox-inline">
                         <input type="checkbox" <% if (infos.scope.indexOf('secret') !== -1) { %> checked <% } %> name="scope" value="secret"> 获取用户秘密

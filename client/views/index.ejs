@@ -10,17 +10,37 @@
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
+  <style>
+    #container {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 5%;
+    }
+    .nav {
+        padding: 0 1px;
+    }
+  </style>
 </head>
 <body>
-    <h1 id=loginInfo>你还没有登录哦</h1>
-    
-    <a href="/login" id="login">点击通过github登录</a>
-    <div id=user></div>
-    <div id=otherAPI hidden>
-        <button id="getArticles" class="btn btn-primary" >获取文章</button>
-        <button id="getArticles" class="btn btn-primary">获取秘密</button> 
+    <div id=container class="row" >
+        <div class="col-xs-6 col-md-3 nav panel panel-info">
+            <div id=loginInfo class="panel-heading">你还没有登录哦</div>
+            <a href="/login" class="btn btn-success" id="login">点击通过github登录</a>
+            <div id=user class="panel-body"></div>
+            <div class="panel-footer">Github: <a href="https://github.com/laoqiren/Oauth-example">https://github.com/laoqiren/Oauth-example</a></div>
+        </div>
+        <div class="col-xs-12 col-md-offset-1 col-md-8">
+            <div id=otherAPI hidden>
+                <h3>Open API</h3> <br/>
+                <button id="getArticles" class="btn btn-primary" >获取收藏文章</button>
+                <button id="getSecrets" class="btn btn-primary">获取秘密</button> 
+            </div>
+            <div id="content" hidden></div>
+        </div>
     </div>
-    <div id="content" hidden></div>
+    
     <script>
         function getCookie(name) 
         { 
@@ -32,6 +52,20 @@
             else 
                 return null; 
         } 
+
+        function delete_cookie( name ) {
+            document.cookie = name + '=;';
+        }
+
+        function requestAPI(url,content,successCb,failCb){
+            $.ajax({
+                url: 'http://localhost:3000/api'+url,
+                type: 'post',
+                data: content,
+                contentType: 'application/json'
+            }).then(successCb,failCb)
+        }
+
         $(document).ready(function(){
             let access_token = getCookie('access_token');
             console.log(access_token)
@@ -39,42 +73,59 @@
             let data = JSON.stringify({
                 access_token:access_token
             })
-            $.ajax({
-                url: 'http://localhost:3000/api/userInfo',
-                type: 'post',
-                data:data,
-                contentType: 'application/json'
-            }).then(res=>{
-                console.log(res)
-                $('#user').html(`获取用户信息API:<br/>姓名:${res.name},年龄:${res.year},学校:${res.school}`);
-                $('#loginInfo').text('已通过Oauth server登录');
+
+            requestAPI('/userInfo',data,res=>{
+                //console.log(res)
+                console.log('获取用户信息成功')
+                $('#user').html(`<strong style="font-size: 20px">${res.name}</strong><br/><br/><strong>${res.year}</strong> years old<br/><br/> Study at <strong>${res.school}</strong>`);
+                $('#loginInfo').html('<span style="font-size:20px">已通过Oauth登录</span>');
                 $('#login').hide();
                 $('#otherAPI').show();
             },res=>{
                 if(res.status === 401) {
                     $('#user').text('token失效，请重新申请授权');
                 }
-            })
+            });
 
             $('#getArticles').on('click',function(){
-                $.ajax({
-                    url: 'http://localhost:3000/api/articles',
-                    type: 'post',
-                    data:data,
-                    contentType: 'application/json'
-                }).then(res=>{
-                    console.log(res);
+                requestAPI('/articles',data,res=>{
+                    //console.log(res);
                     let $html = '';
                     for(let article of res){
-                        $html += `<li>作者:${article.author},标题:${article.title}</li>`
+                        $html += `<li class="list-group-item">作者:${article.author},标题:${article.title}</li>`
                     }
-                    $('#content').html(`<ul>${$html}</ul>`).show();
+                    $('#content').html(`<br/><strong>收藏的文章:</strong><br/><ul class="list-group">${$html}</ul>`).show();
                 },res=>{
                     if(res.status === 401) {
-                        $('#content').text('未授权').show();
+                        $('#content').html(`<br/><div class="alert alert-danger alert-dismissable" role="alert">
+	<button class="close" type="button" data-dismiss="alert">&times;</button>
+	<strong>获取收藏文章</strong>：对不起，Oauth Server未授权该API
+</div>`).show();
                     }
                 })
             })
+
+            $('#getSecrets').on('click',function(){
+                requestAPI('/secrets',data,res=>{
+                    let $html = '';
+                    for(let secret of res){
+                        $html += `<li class="list-group-item" >${secret.content}</li>`
+                    }
+                    $('#content').html(`<br/><strong>秘密:</strong><br/><ul class="list-group">${$html}</ul>`).show();
+                },res=>{
+                    if(res.status === 401) {
+                        $('#content').html(`<br/><div class="alert alert-danger alert-dismissable" role="alert">
+	<button class="close" type="button" data-dismiss="alert">&times;</button>
+	<strong>获取秘密</strong>：对不起，Oauth Server未授权该API
+</div>`).show();
+                    }
+                })
+            })
+
+            $('#logout').on('click',function(){
+                delete_cookie('access_token');
+            })
+
         })
     </script>
 </body>

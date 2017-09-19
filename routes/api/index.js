@@ -4,6 +4,7 @@ const middlewares = require('../../middleware/index');
 
 const registerApp = require('./registerApp');
 const articles = require('./articles');
+const secrets = require('./secret');
 const userInfo = require('./userInfo');
 const revokeToken = require('./revokeToken');
 const deleteApp = require('./deleteApp');
@@ -21,6 +22,8 @@ router.get('/revokeToken',middlewares.ensureLogin,revokeToken);
 router.get('/deleteApp',middlewares.ensureLogin,deleteApp);
 
 router.post('/modifyApp',middlewares.ensureLogin,modifyApp);
+
+router.post('/secrets',middlewares.verifyAccessToken,secrets);
 
 
 module.exports = router;
