@@ -33,7 +33,7 @@ app.get('/',(req,res,next)=>{
         userId = req.cookies.userId
     } else {
         userId = openAPI.generateUserId();
-        res.cookie('userId',userId,{path: '/'});
+        res.cookie('userId',userId,{path: '/',expires: new Date(Date.now() + 3600*48)});
     }
     appInfo.getAppByUserId(userId,(err,result)=>{
         if(result) {

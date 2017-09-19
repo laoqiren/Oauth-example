@@ -78,7 +78,7 @@ exports.generateAccessToken = function (req,userId, clientId,redirect_uri, callb
     // };
   
     //jwt自包含信息
-    let exp = moment().add(7,'days').valueOf();
+    let exp = moment().add(1,'days').valueOf();
     let token = jwt.encode({
       userId,
       clientId,
