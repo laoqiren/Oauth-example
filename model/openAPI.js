@@ -2,51 +2,45 @@ const faker = require('faker');
 var dataArticles = [];
 var secrets = [];
 
-var ARTICLE_NUM = 100;
+const ARTICLE_NUM = 20;
+const SECRET_NUM = 6;
 
-// 生成文章列表
-for (var i = 0; i < 20; i++) {
-  dataArticles.push({
-    id: faker.random.uuid(),
-    author: faker.name.findName(),
-    title: faker.lorem.sentence(),
-    createdAt: faker.date.past(),
-    content: faker.lorem.paragraphs(10)
-  });
-}
-
-// 生成秘密
-for (var i = 0; i < 6; i++) {
-  secrets.push({
-    content: faker.lorem.paragraphs(3)
-  });
-}
-
-// 用户信息
-let mockUsers = {
-  laoqiren: {
-      name: 'laoqiren',
-      year: 20,
-      school: 'hdu'
-  }
-}
-
-let mockDatas = {
-  laoqiren: dataArticles
-}
-
-let mockSecrets = {
-  laoqiren: secrets
-}
 
 exports.queryArticles = function(userId,callback){
-  callback(null,mockDatas[userId]);
+  // 生成文章列表
+  let dataArticles = [];
+  for (var i = 0; i < ARTICLE_NUM; i++) {
+    dataArticles.push({
+      id: faker.random.uuid(),
+      author: faker.name.findName(),
+      title: faker.lorem.sentence(),
+      createdAt: faker.date.past(),
+      content: faker.lorem.paragraphs(10)
+    });
+  }
+  callback(null,dataArticles);
 }
 
 exports.queryUserInfo = function(userId,callback){
-  callback(null,mockUsers[userId]);
+  let mockUserInfo = {
+    name: userId,
+    year: 20,
+    school: faker.name.findName()
+  }
+  callback(null,mockUserInfo);
 }
 
 exports.querySecrets = function(userId,callback){
-  callback(null,mockSecrets[userId]);
+  let mockSecrets = [];
+    // 生成秘密
+  for (var i = 0; i < SECRET_NUM; i++) {
+    secrets.push({
+      content: faker.lorem.paragraphs(3)
+    });
+  }
+  callback(null,mockSecrets);
+}
+
+exports.generateUserId = function(){
+  return faker.name.findName();
 }

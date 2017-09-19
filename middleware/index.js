@@ -4,7 +4,11 @@ const jwt = require('jwt-simple');
 
 exports.ensureLogin = function (req, res, next) {
     // 这里直接设置用户ID=glen
-     req.loginUserId = 'laoqiren';
+    if(!req.cookies.userId){
+      res.status(401);
+      return res.end();
+    }
+     req.loginUserId = req.cookies.userId;
      next();
 };
 

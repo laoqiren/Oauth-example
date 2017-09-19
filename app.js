@@ -1,8 +1,10 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const appInfo = require('./model/index').appInfo;
+const openAPI = require('./model/openAPI');
 
 const api = require('./routes/api/index');
 const oauth = require('./routes/Oauth');
@@ -14,6 +16,7 @@ app.set('jwtTokenSecret',"LuoXia");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
+app.use(cookieParser());
 
 
 app.all("*",(req,res,next)=>{
@@ -25,18 +28,24 @@ app.all("*",(req,res,next)=>{
   });
 
 app.get('/',(req,res,next)=>{
-    appInfo.getAppByUserId('laoqiren',(err,result)=>{
+    let userId;
+    if(req.cookies && req.cookies.userId) {
+        userId = req.cookies.userId
+    } else {
+        userId = openAPI.generateUserId();
+        res.cookie('userId',userId,{path: '/'});
+    }
+    appInfo.getAppByUserId(userId,(err,result)=>{
         if(result) {
             let infos = result;
             infos.scope = infos.scope.split(',');
             return res.render('index',{
-                infos,
-                userId: 'laoqiren'
+                infos
             });
         }
         res.render('index',{
             infos: undefined,
-            userId: 'laoqiren'
+            userId
         })
         
     })

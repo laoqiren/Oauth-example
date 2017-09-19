@@ -16,7 +16,8 @@ exports.register = function(req,res,next){
         description,
         redirectUri,
         homepage,
-        scope
+        scope,
+        userId: req.loginUserId
     }   
     appInfo.getClientIdByUser(req.loginUserId,(err,clientId)=>{
         console.log('clientId',clientId);

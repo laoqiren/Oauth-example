@@ -13,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.0",
+    "cookie-parser": "^1.4.3",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "faker": "^4.1.0",

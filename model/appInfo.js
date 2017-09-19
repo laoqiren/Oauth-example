@@ -20,7 +20,7 @@ exports.deleteAppInfo = function(clientId,callback){
 exports.addAppInfo = function(info,callback){
    redisClient.hmset(info.clientId,info,()=>{
      
-     redisClient.set('laoqiren',info.clientId,()=>{
+     redisClient.set(info.userId,info.clientId,()=>{
       callback(null);
      });
    })

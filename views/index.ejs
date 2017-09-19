@@ -20,9 +20,8 @@
 </head>
 <body>
     <div id="container">
-        <h1>已授权第三方应用信息</h1><br/>
-
          <% if (infos) { %>
+            <h1><%= infos.userId %>授权的第三方应用信息</h1><br/>
             <div>
                 <strong>clientId:</strong> <%= infos.clientId %> <br/>
                 <strong>clientSecret:</strong> <%= infos.clientSecret %>
@@ -66,7 +65,13 @@
             </form>
          <% } %>
         <% if (!infos) { %>
-            <a href="/api/registerApp">注册一个应用</a>
+            <div class="panel panel-info" style="margin-top:30%">
+                <div id=loginInfo class="panel-heading">用户:<%= userId %></div>
+                您还未授权任何APP
+                <a href="/api/registerApp" class="btn btn-success">注册一个应用</a>
+                <div class="panel-footer">Github: <a href="https://github.com/laoqiren/Oauth-example">https://github.com/laoqiren/Oauth-example</a></div>
+            </div>
+            
         <% } %>
     </div>
 </body>
