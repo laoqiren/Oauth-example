@@ -9,16 +9,18 @@
   src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
-    <h1 id=user>你还没有登录哦</h1>
-    <a href="/login" id="login">点击通过github登录</a>
-    <div id="articles">
-        <button id="getArticles" hidden>获取文章</button> 
-        <span id=articlesNot hidden>未授权</span>
-        <div id="content" hidden></div>
-    </div>
+    <h1 id=loginInfo>你还没有登录哦</h1>
     
+    <a href="/login" id="login">点击通过github登录</a>
+    <div id=user></div>
+    <div id=otherAPI hidden>
+        <button id="getArticles" class="btn btn-primary" >获取文章</button>
+        <button id="getArticles" class="btn btn-primary">获取秘密</button> 
+    </div>
+    <div id="content" hidden></div>
     <script>
         function getCookie(name) 
         { 
@@ -44,12 +46,13 @@
                 contentType: 'application/json'
             }).then(res=>{
                 console.log(res)
-                $('#user').html(`姓名:${res.name},年龄:${res.year},学校:${res.school}`);
+                $('#user').html(`获取用户信息API:<br/>姓名:${res.name},年龄:${res.year},学校:${res.school}`);
+                $('#loginInfo').text('已通过Oauth server登录');
                 $('#login').hide();
-                $('#getArticles').show();
+                $('#otherAPI').show();
             },res=>{
                 if(res.status === 401) {
-                    $('#user').text('未授权');
+                    $('#user').text('token失效，请重新申请授权');
                 }
             })
 
@@ -68,7 +71,7 @@
                     $('#content').html(`<ul>${$html}</ul>`).show();
                 },res=>{
                     if(res.status === 401) {
-                        $('#articlesNot').show();
+                        $('#content').text('未授权').show();
                     }
                 })
             })
