@@ -39,6 +39,9 @@ app.get(config.appInfo.redirectUri,(req,res,next)=>{
             redirect_uri: `http://localhost:4000${config.appInfo.redirectUri}`
         })
         .end((err,result)=>{
+            if(err) {
+                return res.end('client_secret is not correct.')
+            }
             //console.log(result.body)
             req.user = result.body
             return res.redirect(`${config.appInfo.redirectUri}?access_token=${result.body.access_token}&expires_in=${result.body.expires_in}`)

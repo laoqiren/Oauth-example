@@ -6,7 +6,7 @@ exports.ensureLogin = function (req, res, next) {
     // 这里直接设置用户ID=glen
     if(!req.cookies.userId){
       res.status(401);
-      return res.end();
+      return res.end('401,please login Oauth Server first');
     }
      req.loginUserId = req.cookies.userId;
      next();
@@ -40,10 +40,10 @@ exports.verifyAccessToken = function (req, res, next) {
     } catch (err) {
       //res.status(401);
       console.log(err)
-      return cb('token error');
+      return res.status(401).end('bad token');
     }
   } else {
-    return cb('token error');
+    return res.status(401).end('bad token');
   }
 };
 
@@ -58,12 +58,12 @@ exports.checkAuthorizeParams = function (req, res, next) {
   }
 
   // 验证client_id是否正确，并查询应用的详细信息
-  database.appInfo.getAppInfo(req.query.client_id, function (err, ret) {
-    if(err) console.log(err)
-    if (err) return next(err);
-    req.appInfo = ret;
+  database.appInfo.getAppByUserId(req.loginUserId,(err,appInfo)=>{
+    if(err || !appInfo || (appInfo.clientId!==req.query.client_id)) return next(utils.invalidParameterError('clientId'));
 
-    // 验证redirect_uri是否符合该应用设置的回调地址规则
+    req.appInfo = appInfo;
+    
+        // 验证redirect_uri是否符合该应用设置的回调地址规则
     database.authorize.verifyAppRedirectUri(req.query.client_id, req.query.redirect_uri, function (err, ok) {
       if (err) return next(err);
       if (!ok) {
@@ -72,5 +72,18 @@ exports.checkAuthorizeParams = function (req, res, next) {
 
       next();
     });
-  });
+  })
+ 
+};
+
+// 统一处理API出错信息
+exports.apiErrorHandle = function (err, req, res, next) {
+  console.error((err && err.stack) || err.toString());
+
+  // 如果有res.apiError()则使用其来输出出错信息
+  if (typeof res.apiError === 'function') {
+    return res.apiError(err);
+  }
+
+  next();
 };

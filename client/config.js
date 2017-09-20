@@ -1,8 +1,8 @@
 exports.appInfo = {
-    clientId: '027ea2ee-2182-588a-8203-fbeaa88295a0',
+    clientId: 'f1daf4ff-ca2c-5502-bbda-6b41c9b16850',
     name: '宇宙最强APP',
     description: '你好啊，我的小可爱！',
-    clientSecret: '0144a8eb475a55217c24048388041954',
+    clientSecret: '83ab57256808e9dd3c9d42b08927e79e',
     redirectUri: '/login/callback'
 }
 exports.apiInfo = {

@@ -8,6 +8,7 @@ const openAPI = require('./model/openAPI');
 
 const api = require('./routes/api/index');
 const oauth = require('./routes/Oauth');
+const middleware = require('./middleware/index');
 
 const app = new express();
 app.set('view engine', 'ejs');
@@ -53,6 +54,8 @@ app.get('/',(req,res,next)=>{
 
 app.use('/api',api);
 app.use('/Oauth2',oauth);
+app.use(middleware.apiErrorHandle);
+
 
 
 app.listen(3000,()=>{

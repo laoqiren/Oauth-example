@@ -56,7 +56,8 @@ exports.generateAuthorizationCode = function (userId, clientId, redirectUri, cal
       if (!info) return callback(utils.invalidParameterError('code'));
       if (info.clientId !== clientId) return callback(utils.invalidParameterError('code'));
     
-      appDB.getAppInfo(clientId, function (err, appInfo) {
+      // 通过 userId获取app信息而不是clientId，解决客户端token未失效但server端用户已经发生变化的情况
+      appDB.getAppByUserId(info.userId, function (err, appInfo) {
         if (err) return callback(err);
         if (appInfo.clientSecret !== clientSecret) return callback(utils.invalidParameterError('client_secret'));
         if (appInfo.redirectUri !== redirectUri) return callback(utils.invalidParameterError('redirect_uri'));
